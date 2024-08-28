@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int N, M, i, j;
+    scanf("%d %d", &N, &M);
+
+    int *funcionarios = (int*) malloc(N * sizeof(int));
+    int *clientes = (int*) malloc(M * sizeof(int));
+
+
+    for (i = 0; i < N; i++) {
+        scanf("%d", &funcionarios[i]);
+    }
+
+
+    for (i = 0; i < M; i++) {
+        scanf("%d", &clientes[i]);
+    }
+
+
+    long long *tempo_acumulado = (long long*) calloc(N, sizeof(long long));
+
+    long long tempo_total = 0; // Usamos long long para evitar estouro de int
+    for (i = 0; i < M; i++) {
+        // Encontrando o funcionário com o menor tempo de processamento acumulado
+        int idx_funcionario_min = 0;
+        for (j = 1; j < N; j++) {
+            if (tempo_acumulado[j] < tempo_acumulado[idx_funcionario_min]) {
+                idx_funcionario_min = j;
+            }
+        }
+
+        tempo_acumulado[idx_funcionario_min] += (long long) clientes[i] * funcionarios[idx_funcionario_min];
+
+        if (tempo_acumulado[idx_funcionario_min] > tempo_total) {
+            tempo_total = tempo_acumulado[idx_funcionario_min];
+        }
+    }
+
+    printf("%lld\n", tempo_total);
+
+    free(funcionarios);
+    free(clientes);
+    free(tempo_acumulado);
+
+    return 0;
+}
